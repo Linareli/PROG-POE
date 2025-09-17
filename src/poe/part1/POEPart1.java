@@ -6,7 +6,7 @@ package poe.part1;
 
 /**
  *
- * @author Nkanyezi
+ * @author i
  */
 public class POEPart1 {
 
@@ -15,6 +15,6 @@ public class POEPart1 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-    }
+    }ehhhhhhhhhhhhhhhhhhhhhhhhhhh
     
 }
