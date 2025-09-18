@@ -14,7 +14,7 @@ public class YezziMetSuccess {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        genuienly trying not to give up..
+        
         Scanner user = new Scanner(System.in);
         Login login = null;
                 
@@ -28,9 +28,9 @@ public class YezziMetSuccess {
             System.out.println("1. Register");
             System.out.println("2. Login");
             System.out.println("3. Exit");
-            System.out.print("Please Choose an option: ");
+            System.out.println(name + " please choose an option from the menu above");
             int option = user.nextInt();
-            user.nextLine(); 
+            user.nextLine();
 
             switch (option) {
                 case 1:
@@ -115,3 +115,4 @@ public class YezziMetSuccess {
         }
     } //end of DirectLog
 }//end of class
+//well done mama
