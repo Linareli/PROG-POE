@@ -23,12 +23,12 @@ public class Login {
     }
 
     // Method to check username format
-    public boolean checkUsername() {
+    public boolean checkUsername(String username) {
         return username.contains("_") && username.length() <= 5;
     }
 
     // Method to check password complexity
-    public boolean checkPasswordComplexity() {
+    public boolean checkPasswordComplexity(String password) {
         return password.length() >= 8 &&
                 //for complexity, the password must ALSO contain: 
                password.matches(".*[A-Z].*") && //atleast 1 capital letter
@@ -45,14 +45,14 @@ public class Login {
 
     // Method to register user
     
-    public String registerUser() {
-        if (!checkUsername()) {
+    public String registerUser(String username, String password, String cellPhoneNumber) {
+        if (!this.checkUsername(username)) {
             return "Username is not correctly formatted, please ensure that your username contains an underscore and is no more than five characters in length.";
-        } else if (!checkPasswordComplexity()) {
+        } else if (!this.checkPasswordComplexity(password)) {
             return "Password does not meet complexity standards, please ensure that the password contains at least eight characters, a capital letter, a number, and a special character.";
-        } else if (checkUsername() && checkPasswordComplexity() && checkCellPhoneNumber()) {
+        } else if (checkUsername(username) && checkPasswordComplexity(password) && checkCellPhoneNumber()) {
             return "User successfully registered."; //(:
-        }
+        }yesss i figured it out
         return "Registration failed."; //):
     }
 
