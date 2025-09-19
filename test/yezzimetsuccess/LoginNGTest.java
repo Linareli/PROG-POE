@@ -47,9 +47,9 @@ public class LoginNGTest {
     
     @Test
     public void testCheckPasswordComplexitywrong(){
-        Assert.assertTrue(login.checkPasswordComplexity));
-    System.out.println("username is incorrectly formatted, please inclue an underscore"
-               + "and ensure it is not longer than 5 characters long");
+        Assert.assertTrue(login.checkPasswordComplexity("password"));
+    System.out.println("password is incorrectly formatted, please ensure that it is 8"
+               + " characters long, has a capital letter, a number and a special char");
     }
     /**
      * Test of checkCellPhoneNumber method, of class Login.
