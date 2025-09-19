@@ -38,7 +38,7 @@ public class Login {
 
     // Method to check cell phone number (assuming correct length and +27 for SA)
     //**using AI for regex code
-    public boolean checkCellPhoneNumber() {
+    public boolean checkCellPhoneNumber(String cellphone) {
         String regex = "^\\+27\\d{9}$";
         return cellPhoneNumber.startsWith("+27") && cellPhoneNumber.length() == 12 && cellPhoneNumber.matches(regex);
     }
@@ -50,9 +50,11 @@ public class Login {
             return "Username is not correctly formatted, please ensure that your username contains an underscore and is no more than five characters in length.";
         } else if (!this.checkPasswordComplexity(password)) {
             return "Password does not meet complexity standards, please ensure that the password contains at least eight characters, a capital letter, a number, and a special character.";
-        } else if (checkUsername(username) && checkPasswordComplexity(password) && checkCellPhoneNumber()) {
+        } else if (!this.checkCellPhoneNumber(cellPhoneNumber)) {
+            return "Incorrect South African phone number, please start with +27 ";
+        } else if (checkUsername(username) && checkPasswordComplexity(password) && checkCellPhoneNumber(cellPhoneNumber)) {
             return "User successfully registered."; //(:
-        }yesss i figured it out
+        }
         return "Registration failed."; //):
     }
 
