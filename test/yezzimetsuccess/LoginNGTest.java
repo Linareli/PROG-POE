@@ -30,14 +30,17 @@ public class LoginNGTest {
         System.out.println("Welcome"+username+"it is great to see you");
     }
     
+    //return false (Login failed)
+   @Test 
    public void testCheckUsernamewrong(String usernamewrong) {
-       Assert.assertTrue(login.checkUsername("kyle!!!!!!!!!!"));
+       Assert.assertFalse(login.checkUsername("kyle!!!!!!!!!!"));
        System.out.println("username is incorrectly formatted, please inclue an underscore"
                + "and ensure it is not longer than 5 characters long");
     }
 
     /**
      * Test of checkPasswordComplexity method, of class Login.
+     * True
      */
     @Test
     public void testCheckPasswordComplexity() {
@@ -45,38 +48,32 @@ public class LoginNGTest {
         System.out.println("Password successfully captured");
     }
     
+    //False return (Login failed)
     @Test
     public void testCheckPasswordComplexitywrong(){
-        Assert.assertTrue(login.checkPasswordComplexity("password"));
+        Assert.assertFalse(login.checkPasswordComplexity("password"));
     System.out.println("password is incorrectly formatted, please ensure that it is 8"
                + " characters long, has a capital letter, a number and a special char");
     }
     /**
      * Test of checkCellPhoneNumber method, of class Login.
+     * Return true
      */
     @Test
     public void testCheckCellPhoneNumber() {
+        Assert.assertTrue(login.checkCellPhoneNumber("+27838968976"));
+        System.out.println("Cell number successfully captured");
     }
-
-    /**
-     * Test of registerUser method, of class Login.
-     */
+    
+    //False return (Login failed)
     @Test
-    public void testRegisterUser() {
+    public void testCheckCellPhoneNumberwrong() {
+        Assert.assertFalse(login.checkCellPhoneNumber("0938968976"));
+        System.out.println("Cell number is incorrectly formatted or does not contain"
+                + " the internTational code, please correct the number na dtry again");
     }
-
-    /**
-     * Test of loginUser method, of class Login.
-     */
-    @Test
-    public void testLoginUser() {
-    }
-
-    /**
-     * Test of returnLoginStatus method, of class Login.
-     */
-    @Test
-    public void testReturnLoginStatus() {
-    }
+    
+    
+    
     
 }
