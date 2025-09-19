@@ -17,6 +17,7 @@ public class YezziMetSuccess {
         
         Scanner user = new Scanner(System.in);
         Login login = null;
+        
                 
         System.out.println("                               A P P                               ");
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -30,7 +31,7 @@ public class YezziMetSuccess {
             System.out.println("3. Exit");
             System.out.println(name + " please choose an option from the menu above");
             int option = user.nextInt();
-            user.nextLine();
+        user.nextLine();
 
             switch (option) {
                 case 1:
@@ -74,7 +75,8 @@ public class YezziMetSuccess {
         String cellphoneNumber = details.nextLine();
 
         Login login = new Login(username, password, cellphoneNumber);
-        String registrationMessage = login.registerUser();
+        String registrationMessage;
+        registrationMessage = login.registerUser(username, password, cellphoneNumber);
         System.out.println(registrationMessage);
 
         if (registrationMessage.equals("User successfully registered.")) {
