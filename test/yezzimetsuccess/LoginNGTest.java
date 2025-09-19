@@ -4,23 +4,36 @@
  */
 package yezzimetsuccess;
 
+import org.testng.Assert;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 
 /**
  *
- * @author Bongi
+ * @author Nkanyezi
  */
 public class LoginNGTest {
+    String username;
+    String password;
+    String cellphoneNumber;
     
     public LoginNGTest() {
     }
-
+    Login login = new Login(username, password, cellphoneNumber);
+    
     /**
      * Test of checkUsername method, of class Login.
      */
     @Test
     public void testCheckUsername() {
+        Assert.assertTrue(login.checkUsername("Kyl_1"));
+        System.out.println("Welcome"+username+"it is great to see you");
+    }
+    
+   public void testCheckUsernamewrong(String usernamewrong) {
+       Assert.assertTrue(login.checkUsername("kyle!!!!!!!!!!"));
+       System.out.println("username is incorrectly formatted, please inclue an underscore"
+               + "and ensure it is not longer than 5 characters long");
     }
 
     /**
@@ -28,8 +41,16 @@ public class LoginNGTest {
      */
     @Test
     public void testCheckPasswordComplexity() {
+        Assert.assertTrue(login.checkPasswordComplexity("Ch&&sec@ke99!"));
+        System.out.println("Password successfully captured");
     }
-
+    
+    @Test
+    public void testCheckPasswordComplexitywrong(){
+        Assert.assertTrue(login.checkPasswordComplexity));
+    System.out.println("username is incorrectly formatted, please inclue an underscore"
+               + "and ensure it is not longer than 5 characters long");
+    }
     /**
      * Test of checkCellPhoneNumber method, of class Login.
      */
