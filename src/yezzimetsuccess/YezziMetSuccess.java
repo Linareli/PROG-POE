@@ -53,7 +53,7 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
                     if (login == null) {
                         login = DirectLogin(user);
                         if (login != null) {
-//                            System.out.println("Welcome!");
+                            System.out.println("[ Access To Message Feature Granted ]");
 //                        }
 //                    } else {
 //                        System.out.println("You are already logged in."); //if user logs in twice
@@ -61,11 +61,6 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
                         JOptionPane.showMessageDialog(null, "WELCOME TO QUICKCHAT");
                         int choice;
                         do{
-//                             choice = Integer.parseInt(JOptionPane.showInputDialog(null,"""
-//                                                                1. send message
-//                                                                2.show recently sent
-//                                                                3.Quit
-//                                                                """));
                              choice = Integer.parseInt(JOptionPane.showInputDialog("1. Send Message\n2. Store Message\n3. Quit"));
                              switch(choice){
                                  case 1:
