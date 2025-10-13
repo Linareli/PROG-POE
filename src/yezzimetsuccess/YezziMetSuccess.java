@@ -4,8 +4,9 @@
  */
 package yezzimetsuccess;
 import java.util.Scanner;
+import javax.swing.JOptionPane;
 /**
- *
+ *ST10478075
  * @author Nkanyezi
  */
 public class YezziMetSuccess {
@@ -16,7 +17,7 @@ public class YezziMetSuccess {
     public static void main(String[] args) {
         
         Scanner user = new Scanner(System.in);
-        Login login = null;
+        Login login = null; //class is a datatype for the oject
         
                 
         System.out.println("                               A P P                               ");
@@ -33,9 +34,10 @@ public class YezziMetSuccess {
             int option = user.nextInt();
         user.nextLine();
 
+        //menu for user to select from
             switch (option) {
                 case 1:
-                    login = register(user);
+                    login = register(user); //login object = register()method
                     if (login != null) {
                         System.out.println("You have successfully registered " +name+"."+ " Now use your details to login (2.Login).");
                         boolean loginSuccess = loginToAccount(user, login);
@@ -46,21 +48,46 @@ public class YezziMetSuccess {
                     if (login == null) {
                         login = DirectLogin(user);
                         if (login != null) {
-                            System.out.println("Welcome!");
-                        }
-                    } else {
-                        System.out.println("You are already logged in.");
-                    }
+//                            System.out.println("Welcome!");
+//                        }
+//                    } else {
+//                        System.out.println("You are already logged in."); //if user logs in twice
+                    //part 2:JOption
+                        JOptionPane.showMessageDialog(null, "WELCOME TO QUICKCHAT");
+                        int choice;
+                        do{
+//                             choice = Integer.parseInt(JOptionPane.showInputDialog(null,"""
+//                                                                1. send message
+//                                                                2.show recently sent
+//                                                                3.Quit
+//                                                                """));
+                             choice = Integer.parseInt(JOptionPane.showInputDialog("1. Send Message\n2. Store Message\n3. Quit"));
+                             switch(choice){
+                                 case 1:
+                                     
+                                   break;  
+                                 case 2:
+                                     JOptionPane.showMessageDialog(null, "Selected feature coming soon..."); 
+                                   break;
+                                 case 3:
+                                     JOptionPane.showMessageDialog(null, "Goodbye " + name + "Closing app..");
+                                            }
+                            }while(choice != 3);
+                        }}
                     break;
                 case 3:
-                    System.out.println("Exiting...");
+                    System.out.println("Exiting..."); //say bye to user if they choose to leave(terminate program)
                     return;
                 default:
-                    System.out.println("Invalid option. Please try again.");
+                    System.out.println("Invalid option. Please try again."); //if they pick any other number other than 1,2,3
             } //menu end
         } //end of loop
     } //main ends here
 
+    //my pseudocode in code: 
+    //same as PRLD (easier to seperate the methods from main program)
+    
+    //register mthod
     private static Login register(Scanner details) {
         System.out.println("Register");
         System.out.println("------------------");
@@ -71,7 +98,7 @@ public class YezziMetSuccess {
         System.out.print("Enter password (at least 8 chars, 1 capital, 1 number, 1 special char): ");
         String password = details.nextLine();
 
-        System.out.print("Enter South African cellphone number: ");
+        System.out.print("Enter South African cellphone number: (please bwgin with +27) ");
         String cellphoneNumber = details.nextLine();
 
         Login login = new Login(username, password, cellphoneNumber);
@@ -86,6 +113,7 @@ public class YezziMetSuccess {
         }
     }//end of method
 
+       
     private static boolean loginToAccount(Scanner scanner, Login login) {
         System.out.println("Login to your account:");
         System.out.print("Enter username: ");
