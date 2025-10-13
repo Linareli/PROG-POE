@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package yezzimetsuccess;
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
 /**
@@ -10,7 +12,10 @@ import javax.swing.JOptionPane;
  * @author Nkanyezi
  */
 public class YezziMetSuccess {
-
+private static ArrayList<Message> sentMessages = new ArrayList<>();
+    private static int MessagesSent = 0;
+    private static int maxMessages;
+    public static String messageID="";
     /**
      * @param args the command line arguments
      */
@@ -18,7 +23,7 @@ public class YezziMetSuccess {
         
         Scanner user = new Scanner(System.in);
         Login login = null; //class is a datatype for the oject
-        
+//        Message message = new Message();
                 
         System.out.println("                               A P P                               ");
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -64,8 +69,40 @@ public class YezziMetSuccess {
                              choice = Integer.parseInt(JOptionPane.showInputDialog("1. Send Message\n2. Store Message\n3. Quit"));
                              switch(choice){
                                  case 1:
+                                    for(int m=0; m < maxMessages; m++) {
+                                        
+                                        //call send message method
+                                        //ok so I'm struggling to do that
+                                        
+                                        //show message results here
+//                                       to happen in message method
+                                    String recipient = JOptionPane.showInputDialog("Enter recipient's phone number (+27xxxxxxxxx)");
+                                    String message = JOptionPane.showInputDialog("Enter message"); 
+                                     if (message.length() <= 50 && message.length() > 0) { //if message meets character requirements
+                                Message msg = new Message(recipient, message, MessagesSent + 1); //code in class
+                                sentMessages.add(msg);
+                                MessagesSent++; //add message to system
+                                JOptionPane.showMessageDialog(null, "Verifying your message..");
+                                     //show message details here:
                                      
-                                   break;  
+            // Calculate message hash
+            String[] words = message.split("\\s+");
+            String messageHash = messageID + ":" + (m + 1) + ":" + words[0].toUpperCase() + ":" + words[words.length - 1].toUpperCase();
+            
+            
+                                     
+                        // Display message details
+            String messageDetails = "Message ID: " + messageID + "\nRecipient: " + recipient + "\nMessage Hash: " + messageHash + "\nMessage Number: " + (m + 1);
+            JOptionPane.showMessageDialog(null, messageDetails);
+            //display menu
+            
+            
+                                    } else {
+                                JOptionPane.showMessageDialog(null, "Message must be between 1 and 50 characters.");
+                                     }
+                                    }JOptionPane.showMessageDialog(null, "Message limit reached.");
+                                   break; 
+                                    
                                  case 2:
                                      JOptionPane.showMessageDialog(null, "Selected feature coming soon..."); 
                                    break;
@@ -144,5 +181,18 @@ public class YezziMetSuccess {
             return null;
         }
     } //end of DirectLog
+     private String generateUniqueID() {  
+        Random rand = new Random();
+        StringBuilder id = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            id.append(rand.nextInt(10));
+            //return uniqueMessageID;
+        }
+        return messageID.toString();
+    } //end of ID generator
+     
+   
+     
+    
 }//end of class
 //well done mama
