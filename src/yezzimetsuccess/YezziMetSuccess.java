@@ -56,12 +56,12 @@ public class YezziMetSuccess {
                         JOptionPane.showMessageDialog(null, "WELCOME TO QUICKCHAT");
                         int choice;
                         do{
-                             choice = Integer.parseInt(JOptionPane.showInputDialog(null,"""
+//                             choice = Integer.parseInt(JOptionPane.showInputDialog(null,"""
 //                                                                1. send message
 //                                                                2.show recently sent
 //                                                                3.Quit
 //                                                                """));
-                             //choice = Integer.parseInt(JOptionPane.showInputDialog("1. Send Message\n2. Store Message\n3. Quit"));
+                             choice = Integer.parseInt(JOptionPane.showInputDialog("1. Send Message\n2. Store Message\n3. Quit"));
                              switch(choice){
                                  case 1:
                                      
@@ -70,7 +70,7 @@ public class YezziMetSuccess {
                                      JOptionPane.showMessageDialog(null, "Selected feature coming soon..."); 
                                    break;
                                  case 3:
-                                     JOptionPane.showMessageDialog(null, "Goodbye " + name + "Closing app..");
+                                     JOptionPane.showMessageDialog(null, "Goodbye " + name + "Closing app...");
                                             }
                             }while(choice != 3);
                         }}
