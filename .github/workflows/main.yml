@@ -1,0 +1,7 @@
+name : Java POE part2
+on:
+push:
+ branches: [master]
+ pull_request:
+ branches :[ master]
+ main:
