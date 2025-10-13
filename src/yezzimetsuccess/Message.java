@@ -4,7 +4,10 @@
  */
 package yezzimetsuccess;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -12,7 +15,7 @@ import java.util.Random;
  */
 public class Message {
     
-    private String uniqueMessageID;
+    private String messageID;
     private int numMessagesSent;
     private String recipient;
     private String message;
@@ -20,7 +23,7 @@ public class Message {
 
     //constructor
     public Message(String recipient, String message, int numMessagesSent) {
-        this.uniqueMessageID = uniqueMessageID;//generateUniqueID();
+        this.messageID = messageID;//generateUniqueID();
         this.numMessagesSent = numMessagesSent;
         this.recipient = recipient;
         this.message = message;
@@ -29,30 +32,53 @@ public class Message {
     
      public int checkrecipientCell(String recipient) {
          //reference from part1
-        String regex = "^\\+27\\d{9}$";
-        return recipient.startsWith("+27") && recipient.length() == 12 && recipient.matches(regex);
-    }
+        if(recipient.matches("^\\+27\\d{9}$")){
+             //return true of false:
+        return 1; //T
+        }else{
+        return 0; //F
+    }}
 
     public boolean checkMessageID(String uniqueMessageID){
-        
+        return uniqueMessageID.matches("\\d[1,10]");
     }
     
     public String createMessageHash(String messageHash){
-        
+//      lastword.toUpperCase();  
+        //substring ntoz
+            String[] words = message.split("\\s+");
+            messageHash = messageID + ":" + (m+1) + ":" + words[0].toUpperCase() + ":" + words[words.length - 1].toUpperCase();  
+            return messageHash;
     }
     
-    public String sentMessage(){
-        
+    public String sentMessage(int numMessagesSent){
+     return "Message sent";   
     }
-    public String printMssage(){
-        
+    public String printMessage(String messageDetails){
+       return messageDetails; 
     } 
-    public int returnTotalMessages(){
+    public int returnTotalMessages(int numMessagesSent ){
+        int maxMessages = 0;
         
+        for(int m=0; m < maxMessages; m++) {
+        System.out.println("Total messages: " + m);
+        }return numMessagesSent;
+    
+}
+
+    public void storeMessage(String msg){
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.put("message", printMessage(message));
+
+    // Save to file
+    try (FileWriter file = new FileWriter("message.json")) {
+        file.write(jsonObject.toString(4)); // pretty print with indent of 4
+        JOptionPane.showMessageDialog(null, "Message saved to message.json");
+    } catch (IOException e) {
+        e.printStackTrace();
     }
-    public int storeMessage(){
-        
-    }
+}
+    
     
 
 
