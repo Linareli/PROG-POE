@@ -95,7 +95,21 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
             String messageDetails = "Message ID: " + messageID + "\nRecipient: " + recipient + "\nMessage Hash: " + messageHash + "\nMessage Number: " + (m + 1);
             JOptionPane.showMessageDialog(null, messageDetails);
             //display menu
-            
+            int menu = Integer.parseInt(JOptionPane.showInputDialog("1. Send Message\n2. Store Message\n3. Delete Message"));
+            switch (menu) {
+                case 1:
+                    // Send message logic here
+                    JOptionPane.showMessageDialog(null, "Message sent!");
+                    break;
+                case 2:
+                    JOptionPane.showMessageDialog(null, "Coming Soon...");
+                    break;
+                case 3:
+                    // Delete message logic here
+                    JOptionPane.showMessageDialog(null, "Message deleted!");
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Invalid option");}
             
                                     } else {
                                 JOptionPane.showMessageDialog(null, "Message must be between 1 and 50 characters.");
