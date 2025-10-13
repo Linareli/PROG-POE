@@ -87,12 +87,10 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
                                      
             // Calculate message hash
             String[] words = message.split("\\s+");
-            String messageHash = messageID + ":" + (m + 1) + ":" + words[0].toUpperCase() + ":" + words[words.length - 1].toUpperCase();
-            
-            
+            String messageHash = messageID + ":" + m + ":" + words[0].toUpperCase() + ":" + words[words.length - 1].toUpperCase();  
                                      
                         // Display message details
-            String messageDetails = "Message ID: " + messageID + "\nRecipient: " + recipient + "\nMessage Hash: " + messageHash + "\nMessage Number: " + (m + 1);
+            String messageDetails = "Message ID: " + messageID + "\nRecipient: " + recipient + "\nMessage Hash: " + messageHash + "\nMessage Number: " + m;
             JOptionPane.showMessageDialog(null, messageDetails);
             //display menu
             int menu = Integer.parseInt(JOptionPane.showInputDialog("1. Send Message\n2. Store Message\n3. Delete Message"));
