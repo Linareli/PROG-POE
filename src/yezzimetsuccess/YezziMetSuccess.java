@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
  */
 public class YezziMetSuccess {
 private static ArrayList<Message> sentMessages = new ArrayList<>();
-    private static int MessagesSent = 0;
+    private static int numMessagesSent = 0;
     private static int maxMessages;
     public static String messageID="";
     /**
@@ -23,7 +23,7 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
         
         Scanner user = new Scanner(System.in);
         Login login = null; //class is a datatype for the oject
-//        Message message = new Message();
+        //Message msg = new Message(recipient, message, numMessagesSent);
                 
         System.out.println("                               A P P                               ");
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -61,6 +61,7 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
                         JOptionPane.showMessageDialog(null, "WELCOME TO QUICKCHAT");
                         int choice;
                         do{
+                            maxMessages = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter the number of messages you wish to send:"));
                              choice = Integer.parseInt(JOptionPane.showInputDialog("1. Send Message\n2. Store Message\n3. Quit"));
                              switch(choice){
                                  case 1:
@@ -74,9 +75,9 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
                                     String recipient = JOptionPane.showInputDialog("Enter recipient's phone number (+27xxxxxxxxx)");
                                     String message = JOptionPane.showInputDialog("Enter message"); 
                                      if (message.length() <= 50 && message.length() > 0) { //if message meets character requirements
-                                Message msg = new Message(recipient, message, MessagesSent + 1); //code in class
+                                Message msg = new Message(recipient, message, numMessagesSent + 1); //code in class
                                 sentMessages.add(msg);
-                                MessagesSent++; //add message to system
+                                numMessagesSent++; //add message to system
                                 JOptionPane.showMessageDialog(null, "Verifying your message..");
                                      //show message details here:
                                      
