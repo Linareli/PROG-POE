@@ -80,7 +80,7 @@ public class MessageNGTest {
     public void testSentMessage() {
        System.out.print("SentMessage");
     String expResult = ""; 
-    String result = msg.sendMessage(/* parameters not visible */);
+    String result = msg.sendMessages(/* parameters not visible */);
     assertEquals(result, expResult);
     fail("The test case is a prototype.");
       
