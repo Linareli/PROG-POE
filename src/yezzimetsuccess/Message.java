@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Bongi
+ * @author Nkanyezi
  */
 public class Message {
     
@@ -47,6 +47,7 @@ public class Message {
 //      lastword.toUpperCase();  
         //substring ntoz
             String[] words = message.split("\\s+");
+        int m = 0;
             messageHash = messageID + ":" + (m+1) + ":" + words[0].toUpperCase() + ":" + words[words.length - 1].toUpperCase();  
             return messageHash;
     }
@@ -62,8 +63,7 @@ public class Message {
         
         for(int m=0; m < maxMessages; m++) {
         System.out.println("Total messages: " + m);
-        }return numMessagesSent;
-    
+        }return numMessagesSent;   
 }
 
     public void storeMessage(String msg){
@@ -77,11 +77,6 @@ public class Message {
     } catch (IOException e) {
         e.printStackTrace();
     }
-}
-    
-    
-
-
-   
+}   
 }
 
