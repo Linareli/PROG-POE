@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
  */
 public class YezziMetSuccess {
 private static ArrayList<Message> sentMessages = new ArrayList<>();
+
     private static int numMessagesSent = 0;
     private static int maxMessages;
     public static String messageID="";
@@ -21,9 +22,9 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
      */
     public static void main(String[] args) {
         
+        ArrayMessages messageObject = new ArrayMessages(number);
         Scanner user = new Scanner(System.in);
         Login login = null; //class is a datatype for the oject
-        //Message msg = new Message(recipient, message, numMessagesSent);
                 
         System.out.println("                               A P P                               ");
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -80,23 +81,63 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
                                 numMessagesSent++; //add message to system
                                 JOptionPane.showMessageDialog(null, "Verifying your message..");
                                      //show message details here:
-                                     
-            // Calculate message hash
+             //MessadeID
+             String messageID ="";
+        int[] numbers = generateTenRandomIntegers(0,10); //the randomize procedure
+        for(int i = 0; i < 10; i++){
+          messageID += numbers[i];
+        }
+        JOptionPane.showMessageDialog(null, messageID);
+  
+    // Calculate message hash
+    //substring 
             String[] words = message.split("\\s+");
-            String messageHash = messageID + ":" + m + ":" + words[0].toUpperCase() + ":" + words[words.length - 1].toUpperCase();  
+            String messageHash = messageID + ":" + (m+1) + ":" + words[0].toUpperCase() + ":" + words[words.length - 1].toUpperCase();  
                                      
                         // Display message details
-            String messageDetails = "Message ID: " + messageID + "\nRecipient: " + recipient + "\nMessage Hash: " + messageHash + "\nMessage Number: " + m;
+            String messageDetails = "Message ID: " + messageID + "\nRecipient: " + recipient + "\nMessage Hash: " + messageHash + "\nMessage Number: " + (m+1);
             JOptionPane.showMessageDialog(null, messageDetails);
             //display menu
-            int menu = Integer.parseInt(JOptionPane.showInputDialog("1. Send Message\n2. Store Message\n3. Delete Message"));
+            int menu = Integer.parseInt(JOptionPane.showInputDialog("I want to:\n 1. Send A Message\n2. Store  Message(opt 1 first)\n3. Delete The Message"));
             switch (menu) {
                 case 1:
                     // Send message logic here
                     JOptionPane.showMessageDialog(null, "Message sent!");
                     break;
+                    //***************************************************************** PART3
                 case 2:
-                    JOptionPane.showMessageDialog(null, "Coming Soon...");
+                    //JOptionPane.showMessageDialog(null, "Coming Soon...");
+                    //use number to instantiate the number of messages sent(whatever the var is)
+                    
+                    //input message into msgObj
+                    for (int counter = 0; counter < maxMessages; counter++){ //new for p3
+                        int loopcount = counter + 1;
+                        String maxMessages = JOptionPane.showInputDialog("Please Enter message number:" + loopcount);
+                        messageObject.sendMessage(message, loopcount);
+                        messageObject.saveHashMessage("#" + counter+ "#", loopcount);
+                        messageObject.saveMessageID(counter + "ID", loopcount);
+                    }
+                        //display the message of the messageObject
+                        for(int i = 0; i < maxMessages; i++){
+                            JOptionPane.showMessageDialog(null, messageObject.getMessageInfoAtIndex(i));
+                        
+                    }
+                        //call method
+                        messageObject.getLongestMessage();
+                        
+                        //ask user for message ID
+                        String prompt = JOptionPane.showInputDialog("Enter Message ID");
+                        //use 
+                        JOptionPane.showMessageDialog(null, messageObject.getMessageUsingID(prompt));
+                        
+                        //invoke Report method
+                        messageObject.DisplayReport();
+                        
+                        //prompt user for message hash
+                        String hash = JOptionPane.showInputDialog("Enter has to disregard message");
+                        //invoke disregarded message using above method
+                        messageObject.DisregardedMessagesUsingHash(hash);
+                        
                     break;
                 case 3:
                     // Delete message logic here
@@ -105,12 +146,14 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
                 default:
                     JOptionPane.showMessageDialog(null, "Invalid option");}
             
+                                   //from part1 neh?
                                     } else {
                                 JOptionPane.showMessageDialog(null, "Message must be between 1 and 50 characters.");
                                      }
                                     }JOptionPane.showMessageDialog(null, "Message limit reached.");
                                    break; 
                                     
+                                   //****************************************************************************
                                  case 2:
                                      JOptionPane.showMessageDialog(null, "Selected feature coming soon..."); 
                                    break;
@@ -190,17 +233,24 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
         }
     } //end of DirectLog
      private String generateUniqueID() {  
-        Random rand = new Random();
+        Random messageID = new Random();
         StringBuilder id = new StringBuilder();
         for (int i = 0; i < 10; i++) {
-            id.append(rand.nextInt(10));
+            id.append(messageID.nextInt(10));
             //return uniqueMessageID;
         }
         return messageID.toString();
     } //end of ID generator
      
-   
-     
+   public static int[] generateTenRandomIntegers(int min, int max){ //creating a NEW number ig
+        Random random = new Random();
+        int[] numbers = new int[10];
+        
+        for(int i = 0; i < 10; i++){
+            numbers[i] = random.nextInt(max - min + 1) + min;
+        }
+        return numbers;
+   }  
     
 }//end of class
 //well done mama
