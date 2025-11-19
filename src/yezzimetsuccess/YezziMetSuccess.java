@@ -106,8 +106,29 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
                     break;
                     //***************************************************************** PART3
                 case 2:
-                    //JOptionPane.showMessageDialog(null, "Coming Soon...");
-                    //use number to instantiate the number of messages sent(whatever the var is)
+                    //updated feature
+                    JOptionPane.showMessageDialog(null, "Message stored");
+                   
+                    break;
+                case 3:
+                    // Delete message logic here
+                    JOptionPane.showMessageDialog(null, "Message deleted!");
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Invalid option");}
+            
+                                   //from part1 neh?
+                                    } else {
+                                JOptionPane.showMessageDialog(null, "Message must be between 1 and 50 characters.");
+                                     }
+                                    }JOptionPane.showMessageDialog(null, "Message limit reached.");
+                                   break; 
+                                   //case 1 ends here
+                                    
+                                   //**************************************************************************** PART3 HERE:
+                                 case 2:
+                                    // JOptionPane.showMessageDialog(null, "Selected feature coming soon..."); 
+                                      //use number to instantiate the number of messages sent(whatever the var is)
                     
                     //input message into msgObj
                     for (int counter = 0; counter < maxMessages; counter++){ //new for p3
@@ -137,25 +158,6 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
                         String hash = JOptionPane.showInputDialog("Enter has to disregard message");
                         //invoke disregarded message using above method
                         messageObject.DisregardedMessagesUsingHash(hash);
-                        
-                    break;
-                case 3:
-                    // Delete message logic here
-                    JOptionPane.showMessageDialog(null, "Message deleted!");
-                    break;
-                default:
-                    JOptionPane.showMessageDialog(null, "Invalid option");}
-            
-                                   //from part1 neh?
-                                    } else {
-                                JOptionPane.showMessageDialog(null, "Message must be between 1 and 50 characters.");
-                                     }
-                                    }JOptionPane.showMessageDialog(null, "Message limit reached.");
-                                   break; 
-                                    
-                                   //****************************************************************************
-                                 case 2:
-                                     JOptionPane.showMessageDialog(null, "Selected feature coming soon..."); 
                                    break;
                                  case 3:
                                      JOptionPane.showMessageDialog(null, "Goodbye " + name + "Closing app...");
