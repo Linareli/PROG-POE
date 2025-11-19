@@ -22,7 +22,7 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
      */
     public static void main(String[] args) {
         
-        ArrayMessages messageObject = new ArrayMessages(number);
+        ArrayMessages messageObject = new ArrayMessages(maxMessages);
         Scanner user = new Scanner(System.in);
         Login login = null; //class is a datatype for the oject
                 
