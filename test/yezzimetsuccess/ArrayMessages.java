@@ -31,8 +31,54 @@ public class ArrayMessages {
        this.Stored_Messages = new String[messageCount];
        this.Message_Hash = new String[messageCount];
        this.Message_ID = new String[messageCount];
-       this.count = messageCount;
-       
+       this.count = messageCount;   
+    }
+    
+    public String getMessageInfoAtIndex(int index){
+        return "Aent Message: " + this.Sent_Messages[index] + '\n'
+                + "Message Hash: " + this.Message_Hash[index] + '\n' +
+                "Message ID:" + this.Message_ID[index];
+    }
+    
+    //getter
+    public void getLongestMessage(){
+        int max = this.Sent_Messages[0].length();
+        int position = 0;
+        //array
+        for(int i = 1; i < this.count; i++){
+            if (this.Sent_Messages[i].length() > max){
+                //for the maximum:
+                max = this.Sent_Messages[i].length();
+                //update index
+                position = i;
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Longest Message: " + this.Sent_Messages[position]);
+    }
+    
+    //
+    public String getMessageUsingID(String ID){
+        int index = 0;
+        
+        for (int i = 0; i < this.count; i++){
+            if(this.Message_ID[i].equals(ID)){
+                index = i;
+                return this.Sent_Messages[index];
+            }
+        }
+        return "Not found";
+    }
+    
+    public void DisplayReport(){
+        String message = "";
+        for (int c = 0; c < this.count; c++){
+            if(!this.Sent_Messages[c].equals("")){
+                message += ("Sent Messages: " +  this.Sent_Messages[c] +
+                        "\n Message Hash: " + this.Message_Hash[c] +
+                        "\n Message ID: " + this.Message_ID[c] + '\n'
+                        );
+            }
+        } JOptionPane.showMessageDialog(null, message);
     }
     
     public void DisregardedMessagesUsingHash(String Hash){
@@ -45,7 +91,7 @@ public class ArrayMessages {
         this.Message_ID[i] = "";
         this.Message_Hash[i] = "";
         disregarded = true;
-        JOptionPane.showMessageDialog(null, "Message successful");
+        JOptionPane.showMessageDialog(null, "Message displayed successful");
     this.DisplayReport();
     break;
     }}
@@ -56,13 +102,11 @@ public class ArrayMessages {
     
     public void DisplayDisregardedMessage(){
         String message = "";
-        for (int c=0; c< this.count; c++){
+        for (int c = 0; c < this.count; c++){
             if(!this.Disregarded_Messages[c].equals("")){
                 message += "Disregareded Message: " + this.Disregarded_Messages[c];
-            }
-            
+            }            
             JOptionPane.showMessageDialog(null, message);
         }
-    }
-    
+    }  
 }
