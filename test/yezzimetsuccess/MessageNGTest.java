@@ -20,97 +20,25 @@ public class MessageNGTest {
      String recipient;
      String message;
      String messageHash;
-    
-    public MessageNGTest() {
-    }
-     Message msg = new Message(recipient, message,  numMessagesSent);
-
-    /**
-     * Test of checkrecipientCell method, of class Message.
-     */
-    
-    
-    @Test
-    public void testCheckrecipientCell() {
-     //success
-    System.out.print("checkRecipientCell");
-    String cell = "";
-    int expResult =0 ;
-    int result = msg.checkrecipientCell(cell);
-    assertEquals(result, expResult);
-    //if fail
-    fail("the test case is a prototype");
-    
+     
+      @Test
+    public void testMessageLengthSuccess() {
+        Message m = new Message(1, "+27718693002", "Hi Mike, can you join us for dinner tonight");
+        assertTrue(m.getMessageText().length() <= 250);
     }
 
-    /**
-     * Test of checkMessageID method, of class Message.
-     */
     @Test
-    public void testCheckMessageID() {
-          System.out.println("checkMessageID");
-    String id = "";
-    boolean expResult = false;
-    boolean result = msg.checkMessageID(id);
-    assertEquals(result, expResult);
-   fail("The test case is a prototype."); 
-        
+    public void testRecipientFormat() {
+        Message m = new Message(1, "+27718693002", "Hi Mike");
+        assertTrue(m.checkRecipientCell());
     }
 
-    /**
-     * Test of createMessageHash method, of class Message.
-     */
     @Test
-    public void testCreateMessageHash() {
-    System.out.println("createMessageHash");
-    String messageID = "";
-    String numMessagesSent = "";
-    String message = "";
-    String expResult = "";
-    String result = msg.createMessageHash(messageID, numMessagesSent, message);
-    assertEquals(result, expResult);
-    // TODO review the generated test code and remove the default call to fail.
-    fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of sentMessage method, of class Message.
-     */
-    @Test
-    public void testSentMessage() {
-       System.out.print("SentMessage");
-    String expResult = ""; 
-    String result = msg.sendMessages(/* parameters not visible */);
-    assertEquals(result, expResult);
-    fail("The test case is a prototype.");
-      
-    }
-
-    /**
-     * Test of printMessage method, of class Message.
-     */
-    @Test
-    public void testPrintMessage() {
-    }
-
-    /**
-     * Test of returnTotalMessages method, of class Message.
-     */
-    @Test
-    public void testReturnTotalMessages() {
-        
-    }
-
-    /**
-     * Test of storeMessage method, of class Message.
-     */
-    @Test
-    public void testStoreMessage() {
-        System.out.println("storeMessage");
-        msg.storeMessage(message);
-        fail("the test case is a prototype");
-       
+    public void testMessageHashFormat() {
+        Message m = new Message(1, "+27718693002", "Hi Mike, can you join us for dinner tonight");
+        String hash = m.getMessageHash();
+        assertNotNull(hash);
+        assertTrue(hash.matches("^\\d{2}:\\d+:[A-Z0-9]+$"));
     }
     
-    
-}
+   }
