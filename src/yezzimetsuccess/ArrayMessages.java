@@ -9,152 +9,146 @@ package yezzimetsuccess;
 import javax.swing.JOptionPane;
 
 /**
- *
  * @author Nkanyezi
- * speak your feelings app
- * what up
- * introspection: focus sport, have a life and be hands on w anything 
- * that you want that requires the input of other people. Dink van dit 
- * as iets vir jou eie hou.
+ *
  */
-public class ArrayMessages {
-    String[] Sent_Messages;
-    String[] Disregarded_Messages;
-    String[] Stored_Messages;
-    String[] Message_Hash;
-    String[] Message_ID;
-    int count = 0;
-    
-    //constructor
-    
-    public ArrayMessages(int messageCount){
-       this.Sent_Messages = new String[messageCount];
-       this.Disregarded_Messages = new String[messageCount];
-       this.Stored_Messages = new String[messageCount];
-       this.Message_Hash = new String[messageCount];
-       this.Message_ID = new String[messageCount];
-       this.count = messageCount;   
-    }
-    
-    //setter
-    //population? no, done during tests
-    public void initializeArrays(){
-        for (int i = 0; i < count; i++){
-       this.Sent_Messages[i] = "";
-       this.Disregarded_Messages[i] = "";
-       this.Stored_Messages[i] = "";
-       this.Message_Hash[i] = "";
-       this.Message_ID[i] = "";
-        }
-    }
-    
-    //gettes
-    
-    //display longest message
-    public void getLongestMessage(){
-        int max = this.Sent_Messages[0].length(); //error
-        int position = 0;
-        //array
-        for(int i = 1; i < this.count; i++){
-            if (this.Sent_Messages[i].length() > max){
-                //for the maximum:
-                max = this.Sent_Messages[i].length();
-                //update index
-                position = i;
-            }
-        }
-        JOptionPane.showMessageDialog(null, "Longest Message: " + this.Sent_Messages[position]);
-    }
-    
-    //find message using ID
-    public String getMessageUsingID(String ID){
-        int index = 0;
-        
-        for (int i = 0; i < this.count; i++){
-            if(this.Message_ID[i].equals(ID)){
-                index = i;
-                return this.Sent_Messages[index];
-            }
-        }
-        return "Not found";
-    }
-    
-    public void DisplayReport(){
-        String message = "";
-        for (int c = 0; c < this.count; c++){
-            if(!this.Sent_Messages[c].equals("")){
-                message += ("Sent Messages: " +  this.Sent_Messages[c] +
-                        "\n Message Hash: " + this.Message_Hash[c] +
-                        "\n Message ID: " + this.Message_ID[c] + '\n'
-                        );
-            }
-        } JOptionPane.showMessageDialog(null, message);
-    }
-    
-    public void DisregardedMessagesUsingHash(String Hash){
-    boolean disregarded = false;
-    for(int i = 0; i< this.count; i++){
-    if (this.Message_Hash[i].equals(Hash)){
-        
-        this.Disregarded_Messages[i]= this.Sent_Messages[i];
-        this.Sent_Messages[i]="";
-        this.Message_ID[i] = "";
-        this.Message_Hash[i] = "";
-        disregarded = true;
-        JOptionPane.showMessageDialog(null, "Message displayed successful");
-    this.DisplayReport();
-    break;
-    }}
-    if(disregarded == false){
-        JOptionPane.showMessageDialog(null, "Message not displayed");
-    }
-    }
-    
-    public void DisplayDisregardedMessage(){
-        String message = "";
-        for (int c = 0; c < this.count; c++){
-            if(!this.Disregarded_Messages[c].equals("")){
-                message += "Disregareded Message: " + this.Disregarded_Messages[c];
-            }            
-            JOptionPane.showMessageDialog(null, message);
-        }
-    }  
+import java.util.*;
+import java.io.*;
+import java.nio.file.*;
 
-    public void sendMessage(String sentMessage, int message_Number){
-        this.Sent_Messages[message_Number - 1] = sentMessage;
-        //program does this(not shown to user)
-        this.Stored_Messages[message_Number - 1] = sentMessage;
-        
+public class ArrayMessages {
+    private List<String> sentMessages = new ArrayList<>();
+    private List<String> disregardedMessages = new ArrayList<>();
+    private List<String> storedMessages = new ArrayList<>();
+    private List<String> messageHashes = new ArrayList<>();
+    private List<String> messageIDs = new ArrayList<>();
+    // store full Message objects for richer operations
+    private List<Message> sentMessageObjects = new ArrayList<>();
+
+    public ArrayMessages() {}
+
+    public void addSentMessage(Message m) {
+        sentMessages.add(m.getMessageText());
+        messageHashes.add(m.getMessageHash());
+        messageIDs.add(m.getMessageID());
+        sentMessageObjects.add(m);
+    }
+
+    public void addDisregardedMessage(Message m) {
+        disregardedMessages.add(m.getMessageText());
+    }
+
+    public void addStoredMessage(Message m) {
+        storedMessages.add(m.getMessageText());
+        // optionally save message object details if needed
+    }
+
+    // a) Display sender and recipient of all sent messages.
+    // Here sender not implemented in POE, so show sender as stored cell (if you add sender field modify accordingly)
+    public List<String> getSentSenderRecipientLines() {
+        List<String> result = new ArrayList<>();
+        for (Message m : sentMessageObjects) {
+            result.add(String.format("Recipient: %s - Message: %s", m.getRecipient(), m.getMessageText()));
+        }
+        return result;
+    }
+
+    // b) Display the longest sent message
+    public String getLongestSentMessage() {
+        String longest = "";
+        for (String m : sentMessages) {
+            if (m != null && m.length() > longest.length()) longest = m;
+        }
+        return longest;
+    }
+
+    // c) Search for a message ID and display recipient + message (returns null if not found)
+    public String findByMessageID(String id) {
+        for (Message m : sentMessageObjects) {
+            if (m.getMessageID().equals(id)) {
+                return String.format("Recipient: %s, Message: %s", m.getRecipient(), m.getMessageText());
+            }
+        }
+        return null;
+    }
+
+    // d) Search for all messages sent to a particular recipient
+    public List<String> findByRecipient(String recipient) {
+        List<String> matches = new ArrayList<>();
+        for (Message m : sentMessageObjects) {
+            if (m.getRecipient().equals(recipient)) matches.add(m.getMessageText());
+        }
+        return matches;
+    }
+
+    // e) Delete a message using the message hash
+    public boolean deleteByHash(String hash) {
+        for (int i = 0; i < sentMessageObjects.size(); i++) {
+            if (sentMessageObjects.get(i).getMessageHash().equals(hash)) {
+                sentMessageObjects.remove(i);
+                sentMessages.remove(i);
+                messageHashes.remove(i);
+                messageIDs.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // f) Display full details report of all sent messages
+    public String getReport() {
+        StringBuilder sb = new StringBuilder();
+        for (Message m : sentMessageObjects) {
+            sb.append(String.format("Message Hash: %s\nRecipient: %s\nMessage: %s\n\n",
+                    m.getMessageHash(), m.getRecipient(), m.getMessageText()));
+        }
+        return sb.toString();
+    }
+
+    // ChatGPT instruction: store message(s) into JSON file
+    public void saveStoredMessagesToJson(String jsonFilePath) throws IOException {
+        // Simple JSON array of objects using manual construction
+        StringBuilder sb = new StringBuilder();
+        sb.append("[\n");
+        for (int i = 0; i < storedMessages.size(); i++) {
+            String m = storedMessages.get(i).replace("\"", "\\\"");
+            sb.append(String.format("  { \"message\": \"%s\" }", m));
+            if (i < storedMessages.size() - 1) sb.append(",\n");
+            else sb.append("\n");
+        }
+        sb.append("]\n");
+        Files.write(Paths.get(jsonFilePath), sb.toString().getBytes());
     }
     
-    public void saveHashMessage(String message_Hash, int message_Number){
-        this.Message_Hash[message_Number - 1] = message_Hash;
-    }
-    
-    public void saveMessageID(String message_ID, int message_Number){
-        this.Message_ID[message_Number - 1] = message_ID;
-    }
-    
-    //getters here
-    public String[] getSentMessages(){
-        return this.Sent_Messages;
-    }
-    
-    public String[] getStoredMessages(){
-        return this.Stored_Messages;
-    }
-    
-    public String[] getMessagesHashes(){
-        return this.Message_Hash;
-    }
-    
-    public String[] getMessagesID(){
-        return this.Message_ID;
-    }
-    
-    public String getMessageInfoAtIndex(int index){
-         return "Sent Message: " + this.Sent_Messages[index] + '\n'
-                + "Message Hash: " + this.Message_Hash[index] + '\n' +
-                "Message ID:" + this.Message_ID[index];
-    }   
+    public List<String> getStoredMessages() {
+    return storedMessages;
 }
+
+    public List<String> getSentMessages() {
+    return sentMessages;
+}
+
+
+    public void loadStoredMessagesFromJson(String jsonFilePath) throws IOException {
+        storedMessages.clear();
+        String content = new String(Files.readAllBytes(Paths.get(jsonFilePath)));
+        // very simple parsing assuming the saved format
+        String[] lines = content.split("\n");
+        for (String l : lines) {
+            l = l.trim();
+            if (l.startsWith("{") && l.contains("\"message\":")) {
+                int first = l.indexOf(":");
+                String part = l.substring(first + 1).trim();
+                part = part.replace("{", "").replace("}", "").trim();
+                // extract between quotes
+                int q1 = part.indexOf("\"");
+                int q2 = part.lastIndexOf("\"");
+                if (q1 >= 0 && q2 > q1) {
+                    String msg = part.substring(q1 + 1, q2);
+                    storedMessages.add(msg);
+                }
+            }
+        }
+    }
+}
+
