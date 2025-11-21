@@ -10,71 +10,82 @@ package yezzimetsuccess;
  */
 public class Login {
       
-    //declarations
+   //declarations
     private String username;
     private String password;
-    private String cellPhoneNumber;
+    private String firstName = "";
+    private String lastName = "";
+    private String cellPhone;
 
+    public Login() {}
+    
     // this is here as my constructor
-    public Login(String username, String password, String cellPhoneNumber) {
+    public void setUserDetails(String username, String password, String cellPhone, String firstName, String lastName) {
         this.username = username;
         this.password = password;
-        this.cellPhoneNumber = cellPhoneNumber;
+        this.cellPhone = cellPhone;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
-    // Method to check username format
-    public boolean checkUsername(String username) {
-        return username.contains("_") && username.length() >= 5;
+    // Boolean: checkUserName()
+    public boolean checkUserName() {
+        if (username == null) return false;
+        return username.contains("_") && username.length() <= 5;
     }
 
-    // Method to check password complexity
-    public boolean checkPasswordComplexity(String password) {
-        return password.length() >= 8 &&
-                //for complexity, the password must ALSO contain: 
-               password.matches(".*[A-Z].*") && //atleast 1 capital letter
-               password.matches(".*\\d.*") &&   //a number
-               password.matches(".*[^a-zA-Z0-9].*");    //other characters
+    // Boolean: checkPasswordComplexity()
+    public boolean checkPasswordComplexity() {
+        if (password == null) return false;
+        return password.length() >= 8
+                && password.matches(".*[A-Z].*")
+                && password.matches(".*\\d.*")
+                && password.matches(".*[^a-zA-Z0-9].*");
     }
 
-    // Method to check cell phone number (assuming correct length and +27 for SA)
-    //**using AI for regex code
-    public boolean checkCellPhoneNumber(String cellphone) {
+    // Boolean: checkCellPhoneNumber()
+    // The POE wants an international format: +27XXXXXXXXX (total length 12 -> '+' + '27' + 9 digits)
+    public boolean checkCellPhoneNumber() {
+        if (cellPhone == null) return false;
         String regex = "^\\+27\\d{9}$";
-        return cellPhoneNumber.startsWith("+27") && cellPhoneNumber.length() == 12 && cellPhoneNumber.matches(regex);
+        return cellPhone.matches(regex);
     }
 
-    // Method to register user
-    
-    public String registerUser(String username, String password, String cellPhoneNumber) {
-        if (!this.checkUsername(username)) {
+    // String registerUser()
+    public String registerUser() {
+        boolean u = checkUserName();
+        boolean p = checkPasswordComplexity();
+        boolean c = checkCellPhoneNumber();
+
+        if (!u)
             return "Username is not correctly formatted, please ensure that your username contains an underscore and is no more than five characters in length.";
-        } else if (!this.checkPasswordComplexity(password)) {
-            return "Password does not meet complexity standards, please ensure that the password contains at least eight characters, a capital letter, a number, and a special character.";
-        } else if (!this.checkCellPhoneNumber(cellPhoneNumber)) {
-            return "Incorrect South African phone number, please start with +27 ";
-        } else if (checkUsername(username) && checkPasswordComplexity(password) && checkCellPhoneNumber(cellPhoneNumber)) {
-            return "User successfully registered."; //(:
-        }
-        return "Registration failed."; //):
+        if (!p)
+            return "Password is not correctly formatted; please ensure that the password contains at least eight characters, a capital letter, a number, and a special character.";
+        if (!c)
+            return "Cell phone number incorrectly formatted or does not contain international code.";
+        // Passed all checks
+        return "User successfully registered.";
     }
 
-    // Method to login user
-    public boolean loginUser(String username, String password) {
-        return this.username.equals(username) && this.password.equals(password);
+    // Boolean loginUser(String attemptedUsername, String attemptedPassword)
+    public boolean loginUser(String attemptedUsername, String attemptedPassword) {
+        if (attemptedUsername == null || attemptedPassword == null) return false;
+        return attemptedUsername.equals(this.username) && attemptedPassword.equals(this.password);
     }
 
-    // Method to return login status
-    public String returnLoginStatus(boolean loginSuccess) {
-        if (loginSuccess) {
-//            String parts = username.split("_");
-//            String firstName = username;
-//            String lastName =: "";
-        
-            return "Welcome, "+ username + " it is great to see you again.";
-        } else {
-            return "Login failed. "
-                    + "Username or password incorrect, please try again.";
-        }
+    // String returnLoginStatus(boolean successful)
+    public String returnLoginStatus(boolean successful) {
+        if (successful)
+            return String.format("Welcome %s ,%s it is great to see you again.", this.firstName, this.lastName);
+        else
+            return "Username or password incorrect, please try again.";
+    
+// getters (for tests)
+//    public String getUsername() { return username; }
+//    public String getCellPhone() { return cellPhone; }
+//    public String getFirstName() { return firstName; }
+//    public String getLastName() { return lastName; }
+
     }//Methods end
 } //end of class
 
