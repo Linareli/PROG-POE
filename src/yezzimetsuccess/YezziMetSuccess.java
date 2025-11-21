@@ -48,6 +48,7 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
                 return;
             }
             //MAIN menu
+            //Improved from scanner to JOption- ENJOY (;
             switch (choice) {
                 case "1": // Register
                     while (!isRegistered) {
@@ -225,7 +226,7 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
             } else {
                 JOptionPane.showMessageDialog(null, "Invalid menu choice. Please choose 1, 2 or 3.");
             }
-        } // end message-entry loop
+        } // end loop
 
         JOptionPane.showMessageDialog(null, "Total messages sent: " + arrays.getSentMessages().size());
 
@@ -288,6 +289,6 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
 
         JOptionPane.showMessageDialog(null, "Byeee " + log.getFirstName() + " Thank you for using QuickChat.");
 
-    }//end of method  
+    }//end  
 }//end of class
-//well done mama
+//well done sweetheart!
