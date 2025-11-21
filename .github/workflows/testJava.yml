@@ -1,0 +1,75 @@
+name: Java CI
+
+on:
+  push;
+    branches: [master]
+pull_request:
+    branches: [master]
+    name: Java CI with TestNG
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Cache Maven packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-m2
+
+    - name: Run Tests
+      run: mvn -B test
+name: Java CI Manual Compile (TestNG)
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: 17
+
+    - name: Download TestNG
+      run: |
+        mkdir libs
+        wget -O libs/testng.jar "https://repo1.maven.org/maven2/org/testng/testng/7.10.2/testng-7.10.2.jar"
+
+    - name: Compile project
+      run: |
+        mkdir -p out
+        javac -cp "libs/testng.jar" \
+          -d out \
+          $(find src/main/java -name "*.java") \
+          $(find src/test/java -name "*.java")
+
+    - name: Run TestNG tests
+      run: |
+        java -cp "out:libs/testng.jar" org.testng.TestNG testng.xml
