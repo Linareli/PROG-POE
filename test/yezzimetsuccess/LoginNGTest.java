@@ -38,10 +38,9 @@ public class LoginNGTest {
                + "and ensure it is not longer than 5 characters long");
     }
 
-    /**
-     * Test of checkPasswordComplexity method, of class Login.
-     * True
-     */
+     // Test of checkPasswordComplexity method, of class Login.
+     //True
+     
     @Test
     public void testCheckPasswordComplexity() {
         Assert.assertTrue(login.checkPasswordComplexity("Ch&&sec@ke99!"));
@@ -72,8 +71,4 @@ public class LoginNGTest {
         System.out.println("Cell number is incorrectly formatted or does not contain"
                 + " the internTational code, please correct the number na dtry again");
     }
-    
-    
-    
-    
 }
