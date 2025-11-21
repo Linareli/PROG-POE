@@ -62,10 +62,12 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
                         JOptionPane.showMessageDialog(null, "WELCOME TO QUICKCHAT");
                         int choice;
                         do{
-                            maxMessages = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter the number of messages you wish to send:"));
-                             choice = Integer.parseInt(JOptionPane.showInputDialog("1. Send Message\n2. Store Message\n3. Quit"));
+                            
+                             choice = Integer.parseInt(JOptionPane.showInputDialog("1. Send a Message\n2. Store a Message\n3. Quit"));
+                             
                              switch(choice){
                                  case 1:
+                                     maxMessages = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter the number of messages you wish to send:"));
                                     for(int m=0; m < maxMessages; m++) {
                                         
                                         //call send message method
@@ -124,40 +126,42 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
                                     }JOptionPane.showMessageDialog(null, "Message limit reached.");
                                    break; 
                                    //case 1 ends here
-                                    
+                                   
+                                   //view recently sent/store
                                    //**************************************************************************** PART3 HERE:
+                                   //8 cases
                                  case 2:
-                                    // JOptionPane.showMessageDialog(null, "Selected feature coming soon..."); 
-                                      //use number to instantiate the number of messages sent(whatever the var is)
-                    
-                    //input message into msgObj
-                    for (int counter = 0; counter < maxMessages; counter++){ //new for p3
-                        int loopcount = counter + 1;
-                        String maxMessages = JOptionPane.showInputDialog("Please Enter message number:" + loopcount);
-                        messageObject.sendMessage(message, loopcount);
-                        messageObject.saveHashMessage("#" + counter+ "#", loopcount);
-                        messageObject.saveMessageID(counter + "ID", loopcount);
-                    }
-                        //display the message of the messageObject
-                        for(int i = 0; i < maxMessages; i++){
-                            JOptionPane.showMessageDialog(null, messageObject.getMessageInfoAtIndex(i));
-                        
-                    }
-                        //call method
-                        messageObject.getLongestMessage();
-                        
-                        //ask user for message ID
-                        String prompt = JOptionPane.showInputDialog("Enter Message ID");
-                        //use 
-                        JOptionPane.showMessageDialog(null, messageObject.getMessageUsingID(prompt));
-                        
-                        //invoke Report method
-                        messageObject.DisplayReport();
-                        
-                        //prompt user for message hash
-                        String hash = JOptionPane.showInputDialog("Enter has to disregard message");
-                        //invoke disregarded message using above method
-                        messageObject.DisregardedMessagesUsingHash(hash);
+                                    // View recently sent ("Selected feature coming soon..."); 
+                                     int menu = Integer.parseInt(JOptionPane.showInputDialog("1. view \n 2.\n"
+                                             + "3." + "4." + "5." + 
+                                             "6." + "7." + "8."));
+                                     switch(menu){
+                                         case 1:
+                                         case 2:
+                                         case 3:
+                                         case 4:
+                                         case 5:
+                                         case 6:
+                                         case 7:
+                                         case 8:
+                                         
+                                     }
+//                  
+//                        //call method
+//                        messageObject.getLongestMessage();//error y error
+//                        
+//                        //ask user for message ID
+//                        String prompt = JOptionPane.showInputDialog("Enter Message ID");
+//                        //use 
+//                        JOptionPane.showMessageDialog(null, messageObject.getMessageUsingID(prompt));
+//                        
+//                        //invoke Report method
+//                        messageObject.DisplayReport();
+//                        
+//                        //prompt user for message hash
+//                        String hash = JOptionPane.showInputDialog("Enter has to disregard message");
+//                        //invoke disregarded message using above method
+//                        messageObject.DisregardedMessagesUsingHash(hash);
                                    break;
                                  case 3:
                                      JOptionPane.showMessageDialog(null, "Goodbye " + name + "Closing app...");

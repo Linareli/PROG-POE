@@ -5,7 +5,7 @@
 package yezzimetsuccess;
 
 /**
- *
+ **ST10478075
  * @author Nkanyezi
  */
 public class Login {
@@ -24,7 +24,7 @@ public class Login {
 
     // Method to check username format
     public boolean checkUsername(String username) {
-        return username.contains("_") && username.length() <= 5;
+        return username.contains("_") && username.length() >= 5;
     }
 
     // Method to check password complexity
@@ -69,6 +69,7 @@ public class Login {
 //            String parts = username.split("_");
 //            String firstName = username;
 //            String lastName =: "";
+        
             return "Welcome, "+ username + " it is great to see you again.";
         } else {
             return "Login failed. "

@@ -29,6 +29,10 @@ public class Message {
         this.message = message;
         this.messageHash = messageHash;//generateMessageHash(message);
     }
+
+    Message() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
      public int checkrecipientCell(String recipient) {
          //reference from part1
@@ -78,5 +82,7 @@ public class Message {
         e.printStackTrace();
     }
 }   
+
+   
 }
 

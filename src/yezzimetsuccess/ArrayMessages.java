@@ -37,6 +37,7 @@ public class ArrayMessages {
     }
     
     //setter
+    //population? no, done during tests
     public void initializeArrays(){
         for (int i = 0; i < count; i++){
        this.Sent_Messages[i] = "";
@@ -51,7 +52,7 @@ public class ArrayMessages {
     
     //display longest message
     public void getLongestMessage(){
-        int max = this.Sent_Messages[0].length();
+        int max = this.Sent_Messages[0].length(); //error
         int position = 0;
         //array
         for(int i = 1; i < this.count; i++){
