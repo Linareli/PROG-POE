@@ -17,40 +17,41 @@ public class LoginNGTest {
     String password;
     String cellphoneNumber;
     
-    public LoginNGTest() {
-    }
-    Login login = new Login(username, password, cellphoneNumber);
+//    removed username, password, cellphoneNumber
+    Login login = new Login();
     
     /**
      * Test of checkUsername method, of class Login.
      */
+    
     @Test
-    public void testCheckUsername() {
-        Assert.assertTrue(login.checkUsername("Kyl_1"));
+    public void testCheckUserNameValid() {
+        assertTrue(login.checkUserName());
         System.out.println("Welcome"+username+"it is great to see you");
     }
-    
-    //return false (Login failed)
-   @Test 
-   public void testCheckUsernamewrong(String usernamewrong) {
-       Assert.assertFalse(login.checkUsername("kyle!!!!!!!!!!"));
-       System.out.println("username is incorrectly formatted, please inclue an underscore"
+
+    @Test
+    public void testCheckUserNameInvalid() {
+        login.setUserDetails("kyle!!!!!!!", "Ch&&sec@ke99!", "+27838968976", "Kyle", "Smith");
+        assertFalse(login.checkUserName());
+         System.out.println("username is incorrectly formatted, please inclue an underscore"
                + "and ensure it is not longer than 5 characters long");
     }
-
+    
      // Test of checkPasswordComplexity method, of class Login.
      //True
      
     @Test
     public void testCheckPasswordComplexity() {
-        Assert.assertTrue(login.checkPasswordComplexity("Ch&&sec@ke99!"));
+        //"Ch&&sec@ke99!"
+        Assert.assertTrue(login.checkPasswordComplexity());
         System.out.println("Password successfully captured");
     }
     
     //False return (Login failed)
     @Test
     public void testCheckPasswordComplexitywrong(){
-        Assert.assertFalse(login.checkPasswordComplexity("password"));
+        Assert.assertFalse(login.checkPasswordComplexity());
     System.out.println("password is incorrectly formatted, please ensure that it is 8"
                + " characters long, has a capital letter, a number and a special char");
     }
@@ -60,15 +61,37 @@ public class LoginNGTest {
      */
     @Test
     public void testCheckCellPhoneNumber() {
-        Assert.assertTrue(login.checkCellPhoneNumber("+27838968976"));
+        //"+27838968976"
+        Assert.assertTrue(login.checkCellPhoneNumber());
         System.out.println("Cell number successfully captured");
     }
     
     //False return (Login failed)
     @Test
     public void testCheckCellPhoneNumberwrong() {
-        Assert.assertFalse(login.checkCellPhoneNumber("0938968976"));
+        //test "0938968976"
+        login.setUserDetails("kyl_1", "Ch&&sec@ke99!", "08966553", "Kyle", "Smith");
+        Assert.assertFalse(login.checkCellPhoneNumber());
         System.out.println("Cell number is incorrectly formatted or does not contain"
                 + " the internTational code, please correct the number na dtry again");
     }
+
+
+    @Test
+    public void testPasswordComplexityInvalid() {
+        login.setUserDetails("kyl_1", "password", "+27838968976", "Kyle", "Smith");
+        assertFalse(login.checkPasswordComplexity());
+    }
+
+    
+    @Test
+    public void testLoginSuccess() {
+        assertTrue(login.loginUser("kyl_1", "Ch&&sec@ke99!"));
+    }
+
+    @Test
+    public void testLoginFail() {
+        assertFalse(login.loginUser("wrong", "wrong"));
+    }
 }
+
