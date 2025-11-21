@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package yezzimetsuccess;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
@@ -20,243 +22,264 @@ private static ArrayList<Message> sentMessages = new ArrayList<>();
     /**
      * @param args the command line arguments
      */
+    private static final String JSON_PATH = "stored_messages.json"; // relative to project root
+
     public static void main(String[] args) {
-        
-        ArrayMessages messageObject = new ArrayMessages(maxMessages);
-        Scanner user = new Scanner(System.in);
-        Login login = null; //class is a datatype for the oject
-                
+              
         System.out.println("                               A P P                               ");
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         System.out.println("                   ++++++++++++++++++++++++++++                    ");
-        System.out.println("                      hey, what is your name?                       ");
-        String name = user.nextLine(); //Store user's name just for a better UX
-        
-        while (true) {
-            System.out.println("1. Register");
-            System.out.println("2. Login");
-            System.out.println("3. Exit");
-            System.out.println(name + " please choose an option from the menu above");
-            int option = user.nextInt();
-        user.nextLine();
+        System.out.println("               ^_^ NEW AND IMPROVED USER INTERFACE ^_^            ");
+       
+       Login log = new Login();
+        ArrayMessages arrays = new ArrayMessages();
 
-        //menu for user to select from
-            switch (option) {
-                case 1:
-                    login = register(user); //login object = register()method
-                    if (login != null) {
-                        System.out.println("You have successfully registered " +name+"."+ " Now use your details to login (2.Login).");
-                        boolean loginSuccess = loginToAccount(user, login);
-                        System.out.println(login.returnLoginStatus(loginSuccess));
+        boolean isRegistered = false;
+        boolean isLoggedIn = false;
+
+        while (true) {
+            String choice = JOptionPane.showInputDialog(
+                "Welcome!\nPlease choose an option:\n1) Register\n2) Login\n3) Exit"
+            );
+
+            if (choice == null) { // User pressed Cancel
+                JOptionPane.showMessageDialog(null, "Goodbye.");
+                return;
+            }
+
+            switch (choice) {
+                case "1": // Register
+                    while (!isRegistered) {
+                        String username = JOptionPane.showInputDialog("Register - Enter username (must contain '_' and be <= 5 chars):");
+                        if (username == null) return;
+                        String password = JOptionPane.showInputDialog("Register - Enter password (min8, 1 uppercase, 1 number, 1 special):");
+                        if (password == null) return;
+                        String cell = JOptionPane.showInputDialog("Register - Enter cell phone (+27XXXXXXXXX):");
+                        if (cell == null) return;
+                        String first = JOptionPane.showInputDialog("Enter first name:");
+                        if (first == null) return;
+                        String last = JOptionPane.showInputDialog("Enter last name:");
+                        if (last == null) return;
+
+                        log.setUserDetails(username, password, cell, first, last);
+                        String regMsg = log.registerUser();
+                        JOptionPane.showMessageDialog(null, regMsg);
+                        if (regMsg.equals("User successfully registered.")) {
+                            isRegistered = true;
+                        } else {
+                            int retry = JOptionPane.showConfirmDialog(null, "Registration failed. Retry?", "Retry", JOptionPane.YES_NO_OPTION);
+                            if (retry != JOptionPane.YES_OPTION) {
+                                JOptionPane.showMessageDialog(null, "Goodbye.");
+                                return;
+                            }
+                        }
                     }
                     break;
-                case 2:
-                    if (login == null) {
-                        login = DirectLogin(user);
-                        if (login != null) {
-                            System.out.println("[ Access To Message Feature Granted ]");
-//                        }
-//                    } else {
-//                        System.out.println("You are already logged in."); //if user logs in twice
-                    //part 2:JOption
-                        JOptionPane.showMessageDialog(null, "WELCOME TO QUICKCHAT");
-                        int choice;
-                        do{
-                            
-                             choice = Integer.parseInt(JOptionPane.showInputDialog("1. Send a Message\n2. Store a Message\n3. Quit"));
-                             
-                             switch(choice){
-                                 case 1:
-                                     maxMessages = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter the number of messages you wish to send:"));
-                                    for(int m=0; m < maxMessages; m++) {
-                                        
-                                        //call send message method
-                                        //ok so I'm struggling to do that
-                                        
-                                        //show message results here
-//                                       to happen in message method
-                                    String recipient = JOptionPane.showInputDialog("Enter recipient's phone number (+27xxxxxxxxx)");
-                                    String message = JOptionPane.showInputDialog("Enter message"); 
-                                     if (message.length() <= 50 && message.length() > 0) { //if message meets character requirements
-                                Message msg = new Message(recipient, message, numMessagesSent + 1); //code in class
-                                sentMessages.add(msg);
-                                numMessagesSent++; //add message to system
-                                JOptionPane.showMessageDialog(null, "Verifying your message..");
-                                     //show message details here:
-             //MessadeID
-             String messageID ="";
-        int[] numbers = generateTenRandomIntegers(0,10); //the randomize procedure
-        for(int i = 0; i < 10; i++){
-          messageID += numbers[i];
-        }
-        JOptionPane.showMessageDialog(null, messageID);
-  
-    // Calculate message hash
-    //substring 
-            String[] words = message.split("\\s+");
-            String messageHash = messageID + ":" + (m+1) + ":" + words[0].toUpperCase() + ":" + words[words.length - 1].toUpperCase();  
-                                     
-                        // Display message details
-            String messageDetails = "Message ID: " + messageID + "\nRecipient: " + recipient + "\nMessage Hash: " + messageHash + "\nMessage Number: " + (m+1);
-            JOptionPane.showMessageDialog(null, messageDetails);
-            //display menu
-            int menu = Integer.parseInt(JOptionPane.showInputDialog("I want to:\n 1. Send A Message\n2. Store  Message(opt 1 first)\n3. Delete The Message"));
-            switch (menu) {
-                case 1:
-                    // Send message logic here
-                    JOptionPane.showMessageDialog(null, "Message sent!");
+
+                case "2": // Login
+                    if (!isRegistered) {
+                        JOptionPane.showMessageDialog(null, "You must register before logging in.");
+                        break;
+                    }
+                    while (!isLoggedIn) {
+                        String attemptUser = JOptionPane.showInputDialog("Login - enter username:");
+                        if (attemptUser == null) return;
+                        String attemptPass = JOptionPane.showInputDialog("Login - enter password:");
+                        if (attemptPass == null) return;
+
+                        isLoggedIn = log.loginUser(attemptUser, attemptPass);
+                        JOptionPane.showMessageDialog(null, log.returnLoginStatus(isLoggedIn));
+                        if (!isLoggedIn) {
+                            int retry = JOptionPane.showConfirmDialog(null, "Login failed. Retry?", "Retry", JOptionPane.YES_NO_OPTION);
+                            if (retry != JOptionPane.YES_OPTION) {
+                                JOptionPane.showMessageDialog(null, "Goodbye.");
+                                return;
+                            }
+                        }
+                    }
                     break;
-                    //***************************************************************** PART3
-                case 2:
-                    //updated feature
-                    JOptionPane.showMessageDialog(null, "Message stored");
-                   
-                    break;
-                case 3:
-                    // Delete message logic here
-                    JOptionPane.showMessageDialog(null, "Message deleted!");
-                    break;
-                default:
-                    JOptionPane.showMessageDialog(null, "Invalid option");}
-            
-                                   //from part1 neh?
-                                    } else {
-                                JOptionPane.showMessageDialog(null, "Message must be between 1 and 50 characters.");
-                                     }
-                                    }JOptionPane.showMessageDialog(null, "Message limit reached.");
-                                   break; 
-                                   //case 1 ends here
-                                   
-                                   //view recently sent/store
-                                   //**************************************************************************** PART3 HERE:
-                                   //8 cases
-                                 case 2:
-                                    // View recently sent ("Selected feature coming soon..."); 
-                                     int menu = Integer.parseInt(JOptionPane.showInputDialog("1. view \n 2.\n"
-                                             + "3." + "4." + "5." + 
-                                             "6." + "7." + "8."));
-                                     switch(menu){
-                                         case 1:
-                                         case 2:
-                                         case 3:
-                                         case 4:
-                                         case 5:
-                                         case 6:
-                                         case 7:
-                                         case 8:
-                                         
-                                     }
-//                  
-//                        //call method
-//                        messageObject.getLongestMessage();//error y error
-//                        
-//                        //ask user for message ID
-//                        String prompt = JOptionPane.showInputDialog("Enter Message ID");
-//                        //use 
-//                        JOptionPane.showMessageDialog(null, messageObject.getMessageUsingID(prompt));
-//                        
-//                        //invoke Report method
-//                        messageObject.DisplayReport();
-//                        
-//                        //prompt user for message hash
-//                        String hash = JOptionPane.showInputDialog("Enter has to disregard message");
-//                        //invoke disregarded message using above method
-//                        messageObject.DisregardedMessagesUsingHash(hash);
-                                   break;
-                                 case 3:
-                                     JOptionPane.showMessageDialog(null, "Goodbye " + name + "Closing app...");
-                                            }
-                            }while(choice != 3);
-                        }}
-                    break;
-                case 3:
-                    System.out.println("Exiting..."); //say bye to user if they choose to leave(terminate program)
+
+                case "3": // Exit
+                    JOptionPane.showMessageDialog(null, "Goodbye.");
                     return;
+
                 default:
-                    System.out.println("Invalid option. Please try again."); //if they pick any other number other than 1,2,3
-            } //menu end
-        } //end of loop
-    } //main ends here
+                    JOptionPane.showMessageDialog(null, "Invalid option. Please choose 1, 2, or 3.");
+            }
 
-    //my pseudocode in code: 
-    //same as PRLD (easier to seperate the methods from main program)
-    
-    //register mthod
-    private static Login register(Scanner details) {
-        System.out.println("Register");
-        System.out.println("------------------");
-
-        System.out.print("Enter username (with underscore and under 5 chars): ");
-        String username = details.nextLine();
-
-        System.out.print("Enter password (at least 8 chars, 1 capital, 1 number, 1 special char): ");
-        String password = details.nextLine();
-
-        System.out.print("Enter South African cellphone number: (please bwgin with +27) ");
-        String cellphoneNumber = details.nextLine();
-
-        Login login = new Login(username, password, cellphoneNumber);
-        String registrationMessage;
-        registrationMessage = login.registerUser(username, password, cellphoneNumber);
-        System.out.println(registrationMessage);
-
-        if (registrationMessage.equals("User successfully registered.")) {
-            return login;
-        } else {
-            return null;
+            if (isRegistered && isLoggedIn) {
+                break; // exit the pre-login menu loop to enter QuickChat
+            }
         }
-    }//end of method
 
-       
-    private static boolean loginToAccount(Scanner scanner, Login login) {
-        System.out.println("Login to your account:");
-        System.out.print("Enter username: ");
-        String loginUsername = scanner.nextLine();
-        System.out.print("Enter password: ");
-        String loginPassword = scanner.nextLine();
+        // Now the user is registered AND logged in, start QuickChat app
+        JOptionPane.showMessageDialog(null, "Welcome to QuickChat, " + log.getFirstName() + "!");
 
-        return login.loginUser(loginUsername, loginPassword);
-    } //end of logToAcc
+        // ... Paste here the entire message sending, storing, and part 3 menu code from previous MessageApp version
 
-    private static Login DirectLogin(Scanner scanner) {
-        System.out.println("Login to your account:");
-        System.out.print("Enter username: ");
-        String loginUsername = scanner.nextLine();
-        System.out.print("Enter password: ");
-        String loginPassword = scanner.nextLine();
-
-        // In a real app, I would retrieve the Login object from a database or storage but we don't have that here, what now..
-        // I'll just create a new Login object and check the credentials yeeeaa
-        System.out.print("Enter cellphone number: ");
-        String cellphoneNumber = scanner.nextLine();
-        Login login = new Login(loginUsername, loginPassword, cellphoneNumber);
-
-        if (login.loginUser(loginUsername, loginPassword)) {
-            return login;
-        } else {
-            System.out.println("Invalid username or password.");
-            return null;
+        int maxMessages;
+        while (true) {
+            String nm = JOptionPane.showInputDialog("How many messages do you want to enter?");
+            if (nm == null) return;
+            try {
+                maxMessages = Integer.parseInt(nm);
+                if (maxMessages <= 0) {
+                    JOptionPane.showMessageDialog(null, "Enter a positive integer.");
+                    continue;
+                }
+                break;
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Invalid number. Please enter an integer.");
+            }
         }
-    } //end of DirectLog
-     private String generateUniqueID() {  
-        Random messageID = new Random();
-        StringBuilder id = new StringBuilder();
-        for (int i = 0; i < 10; i++) {
-            id.append(messageID.nextInt(10));
-            //return uniqueMessageID;
+
+        int enteredMessages = 0; // counts entries that result in send/disregard/store
+        int loopMessageNumber = 1; // used for Message.messageNumber
+
+        while (enteredMessages < maxMessages) {
+            // main numeric menu for each message entry
+            String menu = JOptionPane.showInputDialog(
+                    "Choose an option:\n1) Send Message\n2) Show recently sent messages (Coming Soon)\n3) Quit application"
+            );
+            if (menu == null) { // user cancelled -> confirm exit
+                int confirm = JOptionPane.showConfirmDialog(null, "Do you want to quit the application?", "Quit", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) break;
+                else continue;
+            }
+
+            if (menu.equals("3")) {
+                int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?", "Quit", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) break;
+                else continue;
+            }
+
+            if (menu.equals("2")) {
+                JOptionPane.showMessageDialog(null, "Coming Soon.");
+                continue; // does not count as an entered message
+            }
+
+            if (menu.equals("1")) {
+                // collect recipient and message
+                String recipient = JOptionPane.showInputDialog("Enter recipient cell (+27XXXXXXXXX):");
+                if (recipient == null) continue; // allow retry, does not count
+                String messageText = JOptionPane.showInputDialog("Enter message (max 250 chars):");
+                if (messageText == null) continue;
+                if (messageText.length() > 250) {
+                    JOptionPane.showMessageDialog(null, "Please enter a message of less than 250 characters.");
+                    continue; // does not count
+                }
+
+                Message m = new Message(loopMessageNumber, recipient, messageText);
+
+                // numeric menu for action: Send / Discard / Store
+                String action = JOptionPane.showInputDialog(
+                        "Choose action:\n1) Send Message\n2) Discard Message\n3) Store Message"
+                );
+                if (action == null) continue; // user cancelled action, does not count
+
+                switch (action) {
+                    case "1": // send
+                        arrays.addSentMessage(m);
+                        enteredMessages++;
+                        loopMessageNumber++;
+                        JOptionPane.showMessageDialog(null, m.printMessages() + "\n\n" + m.SentMessage("send"));
+                        break;
+                    case "2": // discard
+                        arrays.addDisregardedMessage(m);
+                        enteredMessages++;
+                        loopMessageNumber++;
+                        JOptionPane.showMessageDialog(null, m.SentMessage("disregard"));
+                        break;
+                    case "3": // store -> auto-save to JSON immediately
+                        arrays.addStoredMessage(m);
+                        enteredMessages++;
+                        loopMessageNumber++;
+                        JOptionPane.showMessageDialog(null, m.SentMessage("store"));
+                        // auto-save option (Option 1)
+                        try {
+                            arrays.saveStoredMessagesToJson(JSON_PATH);
+                            JOptionPane.showMessageDialog(null, "Stored messages saved to JSON (" + JSON_PATH + ").");
+                        } catch (IOException ioe) {
+                            JOptionPane.showMessageDialog(null, "Error saving stored messages to JSON: " + ioe.getMessage());
+                        }
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(null, "Invalid action selected. Please choose 1, 2 or 3.");
+                        // do not increment enteredMessages so user can retry
+                        break;
+                }
+
+                // if max reached after this action, notify and exit message-entry loop
+                if (enteredMessages >= maxMessages) {
+                    JOptionPane.showMessageDialog(null, "Message limit reached");
+                    break;
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Invalid menu choice. Please choose 1, 2 or 3.");
+            }
+        } // end message-entry loop
+
+        JOptionPane.showMessageDialog(null, "Total messages sent: " + arrays.getSentMessages().size());
+
+        // Part 3 menu: arrays operations + load JSON option (Option 3)
+        String part3 = JOptionPane.showInputDialog(
+                "Part 3 options:\n1) Show sent recipient/message list\n2) Show longest sent message\n3) Load Stored Messages from JSON\n4) Search message by ID\n5) Search messages by recipient\n6) Delete message by hash\n7) Display report\n8) Exit"
+        );
+
+        while (part3 != null && !part3.equals("8")) {
+            switch (part3) {
+                case "1":
+                    List<String> lines = arrays.getSentSenderRecipientLines();
+                    JOptionPane.showMessageDialog(null, lines.isEmpty() ? "No sent messages." : String.join("\n", lines));
+                    break;
+                case "2":
+                    String longest = arrays.getLongestSentMessage();
+                    JOptionPane.showMessageDialog(null, longest.isEmpty() ? "No sent messages." : longest);
+                    break;
+                case "3":
+                    try {
+                        arrays.loadStoredMessagesFromJson(JSON_PATH);
+                        JOptionPane.showMessageDialog(null, "Loaded stored messages from JSON. Count: " + arrays.getStoredMessages().size());
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(null, "Error loading JSON: " + ex.getMessage());
+                    }
+                    break;
+                case "4":
+                    String id = JOptionPane.showInputDialog("Enter message ID:");
+                    if (id != null) {
+                        String found = arrays.findByMessageID(id);
+                        JOptionPane.showMessageDialog(null, found == null ? "Not found" : found);
+                    }
+                    break;
+                case "5":
+                    String r = JOptionPane.showInputDialog("Enter recipient phone (+27...):");
+                    if (r != null) {
+                        List<String> msgs = arrays.findByRecipient(r);
+                        JOptionPane.showMessageDialog(null, msgs.isEmpty() ? "No messages" : String.join("\n", msgs));
+                    }
+                    break;
+                case "6":
+                    String hash = JOptionPane.showInputDialog("Enter message hash to delete:");
+                    if (hash != null) {
+                        boolean ok = arrays.deleteByHash(hash);
+                        JOptionPane.showMessageDialog(null, ok ? "Message successfully deleted." : "Message not found.");
+                    }
+                    break;
+                case "7":
+                    String report = arrays.getReport();
+                    JOptionPane.showMessageDialog(null, report.isEmpty() ? "No sent messages." : report);
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Invalid option. Please choose 1-8.");
+            }
+
+            part3 = JOptionPane.showInputDialog(
+                    "Part 3 options:\n1) Show sent recipient/message list\n2) Show longest sent message\n3) Load Stored Messages from JSON\n4) Search message by ID\n5) Search messages by recipient\n6) Delete message by hash\n7) Display report\n8) Exit"
+            );
         }
-        return messageID.toString();
-    } //end of ID generator
-     
-   public static int[] generateTenRandomIntegers(int min, int max){ //creating a NEW number ig
-        Random random = new Random();
-        int[] numbers = new int[10];
-        
-        for(int i = 0; i < 10; i++){
-            numbers[i] = random.nextInt(max - min + 1) + min;
-        }
-        return numbers;
-   }  
-    
+
+        JOptionPane.showMessageDialog(null, "Byeee " + log.getFirstName() + " Thank you for using QuickChat.");
+
+    }//end of method  
 }//end of class
 //well done mama
